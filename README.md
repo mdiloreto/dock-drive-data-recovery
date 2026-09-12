@@ -4,30 +4,28 @@ Documentacion operativa de la recuperacion de datos desde un volumen NTFS
 inconsistente y su migracion escalonada a un filesystem Btrfs RAID1 sobre dos
 discos fisicos de 1 TB.
 
-## Estado actual
+## Estado final
 
-Al primer control posterior al inicio del 2026-09-12, la conversion de los
-bloques de datos a RAID1 estaba en ejecucion. Metadata y system ya estaban en
-RAID1. Los valores debajo son una fotografia inicial; `scripts/status.sh`
-muestra el estado actual. El backup de la laptop debe conservarse hasta
-completar balance, scrub y verificacion final.
+La migracion escalonada se completo el 2026-09-12. Data, metadata y system
+quedaron exclusivamente en RAID1; ambos miembros completaron scrub con status
+0 y una comparacion final `xxh128` detecto cero archivos faltantes, diferentes
+o adicionales. El backup independiente debe conservarse porque RAID no es un
+backup.
 
 ```text
-Data,single:  517551947776 bytes
-Data,RAID1:     4294967296 bytes
-Metadata:     RAID1
-System:       RAID1
-Device errors: 0 en ambos discos
+Data,RAID1:     521838526464 bytes
+Metadata,RAID1:   1073741824 bytes
+System,RAID1:       67108864 bytes
+Device missing: 0
+Device errors:  0 en ambos discos
+Scrub errors:   0
 ```
 
-No se debe desmontar el filesystem, desconectar el dock, iniciar otro balance
-ni ejecutar un scrub mientras el balance de datos este activo.
+## Que hizo la migracion
 
-## Que estamos haciendo
-
-Btrfs divide los datos en block groups. El comando activo relocaliza cada
-block group con perfil `single` y crea dos copias, una en cada disco fisico.
-Cuando termine, `Data,single` debe desaparecer y todos los perfiles deben ser
+Btrfs divide los datos en block groups. El balance relocalizo cada block group
+con perfil `single` y creo dos copias, una en cada disco fisico. La verificacion
+final confirmo que `Data,single` desaparecio y todos los perfiles quedaron en
 `RAID1`.
 
 Los discos no son imagenes sector por sector. Ambos pertenecen a un unico

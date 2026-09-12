@@ -192,6 +192,23 @@ systemd-inhibit --what=sleep:shutdown:idle \
   btrfs balance start -dconvert=raid1 "$BTRFS_MOUNT"
 ```
 
+Balance, scrub y comparacion final:
+
+```bash
+systemd-inhibit --what=sleep:shutdown:idle \
+  --why='Final Btrfs RAID1 scrub' \
+  sudo btrfs scrub start -B "$BTRFS_MOUNT"
+systemd-inhibit --what=sleep:shutdown:idle \
+  --why='Final RAID1 checksum verification' \
+  ionice -c 3 nice -n 19 rsync -aHnc --delete \
+  --no-owner --no-group --no-perms --protect-args \
+  --checksum-choice=xxh128 --human-readable --itemize-changes --stats \
+  "$BACKUP_ROOT/" "$BTRFS_MOUNT/"
+```
+
+El balance y ambos scrubs terminaron con status 0. La comparacion final reporto
+cero archivos creados, eliminados, transferidos o diferentes.
+
 ## Observabilidad
 
 ```bash

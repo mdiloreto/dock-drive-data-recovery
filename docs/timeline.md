@@ -23,7 +23,11 @@
 5. Se desmontaron el NTFS real y el montaje FUSE fantasma.
 6. Se agrego WD10EZEX al filesystem, eliminando la firma NTFS.
 7. Metadata y system se convirtieron de DUP a RAID1 con balance status 0.
-8. A las 13:20:35 comenzo la conversion de data de single a RAID1.
+8. La conversion de data termino a las 16:24:28 con status 0 y sin perfiles
+   `single` remanentes.
+9. Ambos miembros completaron un scrub de 966.80 GiB en 1:15:40, sin errores.
+10. La comparacion final `rsync -n --delete` con xxh128 verifico 29,937 archivos
+    y 523.31 GB, sin faltantes, diferencias ni archivos adicionales.
 
 ## Contenido deliberadamente excluido
 

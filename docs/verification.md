@@ -55,18 +55,18 @@ cycles.
   abrir nodos `root:disk`. `btrfs filesystem usage` reporto siempre
   `Device missing: 0`, y los ioctls mostraron ambos dispositivos.
 
-## Gate final pendiente
+## Gate final completado
 
-La migracion solo queda aceptada cuando:
+La migracion fue aceptada con estos resultados:
 
-1. El balance termina con status 0.
+1. El balance termino con status 0.
 2. `btrfs filesystem df` no muestra `Data,single`.
 3. Data, metadata y system aparecen exclusivamente como RAID1.
-4. Ambos juegos de device stats siguen en cero.
-5. Un scrub completo termina sin errores no corregidos.
-6. La comparacion final usa `-n --delete` y reporta cero diferencias en ambas
-   direcciones sin borrar archivos.
+4. Ambos juegos de device stats estan en cero.
+5. Ambos miembros terminaron scrub con status 0 y sin errores.
+6. La comparacion final `-n --delete` reporto cero archivos faltantes,
+   diferentes o adicionales sin borrar archivos.
 
 La comparacion original sin `--delete` demostro que todos los archivos fuente
 coincidian por contenido, pero no podia detectar archivos presentes solamente
-en el destino. El gate final corrige esta limitacion.
+en el destino. El gate final corrigio esta limitacion.

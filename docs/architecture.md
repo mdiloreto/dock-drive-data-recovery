@@ -27,7 +27,7 @@ Fase RAID1:
   Metadata/system: DUP -> RAID1
   Data: single -> RAID1
 
-Final esperado:
+Final alcanzado:
   NVMe: backup independiente
   WD10EZRX + WD10EZEX: Btrfs RAID1
 ```
