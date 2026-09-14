@@ -1,0 +1,5 @@
+.worktrees/
+artifacts/
+*.log
+smart-*.txt
+*.files0
